@@ -14,6 +14,9 @@ namespace Ecom.Infrastructure.Data.Configurations
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
             builder.Property(x => x.ImageName).HasMaxLength(200).IsRequired();
+            builder.HasData(new Photo { Id = 1, ImageName = "test.jpg", ProductId = 1 }
+                
+            );
 
         }
     }

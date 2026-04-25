@@ -15,10 +15,9 @@ namespace Ecom.Infrastructure.Data.Configurations
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
             builder.Property(x => x.Name).HasMaxLength(30).IsRequired();
             builder.Property(x => x.Description).HasMaxLength(100).IsRequired();
-            builder.Property(x => x.Price).HasPrecision(18, 2).IsRequired();
-            builder.HasOne(x => x.Category).WithMany(x => x.products).HasForeignKey(x => x.CategoryId);
-            builder.HasMany(x => x.Photos).WithOne(x => x.Product).HasForeignKey(x => x.ProductId);
-            builder.HasData(new Product { Id=1, Name="test", Description="test description", Price=10, CategoryId=1 });
+            builder.Property(x => x.NewPrice).HasPrecision(18, 2).IsRequired();
+
+            builder.HasData(new Product { Id = 1, Name = "test", Description = "test description", NewPrice = 10, CategoryId = 1 });
         }
     }
 }

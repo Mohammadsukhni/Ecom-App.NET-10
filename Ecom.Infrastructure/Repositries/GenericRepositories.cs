@@ -24,15 +24,11 @@ namespace Ecom.Infrastructure.Repositries
         public async Task DeleteAsync(int id)
         {
             var entity = await _dbContext.Set<T>().FindAsync(id);
-            if (entity != null)
-            {
+            
                 _dbContext.Set<T>().Remove(entity);
                 await _dbContext.SaveChangesAsync();
-            }
-            else
-            {
-                throw new Exception($"Entity with id {id} not found.");
-            }
+            
+
         }
 
         public async Task<List<T>> GetAllAsync()
@@ -53,14 +49,10 @@ namespace Ecom.Infrastructure.Repositries
         public async Task<T> GetByIdAsync(int id)
         {
             var entity = await _dbContext.Set<T>().FindAsync(id);
-            if (entity != null)
-            {
-                return entity;
-            }
-            else
-            {
-                throw new Exception($"Entity with id {id} not found.");
-            }
+
+            return entity;
+
+
         }
 
         public async Task<T> GetByIdAsync(int id, params Expression<Func<T, object>>[] includes)
@@ -71,14 +63,7 @@ namespace Ecom.Infrastructure.Repositries
                 query = query.Include(item);
             }
             var entity = await query.FirstOrDefaultAsync(e => EF.Property<int>(e, "Id") == id);
-            if (entity != null)
-            {
-                return entity;
-            }
-            else
-            {
-                throw new Exception($"Entity with id {id} not found.");
-            }
+            return entity;
         }
 
         public async Task UpdateAsync(T entity)

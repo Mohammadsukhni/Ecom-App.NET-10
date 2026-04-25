@@ -6,6 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Text;
+using Ecom.Infrastructure.Repositries.service;
+using Ecom.Core.Services;
+using Microsoft.Extensions.FileProviders;
 
 namespace Ecom.Infrastructure
 {
@@ -20,6 +23,8 @@ namespace Ecom.Infrastructure
                 //services.AddScoped<IPhotoRepository, PhotoRepository>();
                 //apply UnitOfWork pattern
                 services.AddScoped<IUnitOfWork, UnitOfWork>();
+                services.AddSingleton<IManageService, ManageService>();
+                services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(),"wwwroot")));
                 //apply DbContext
                 services.AddDbContext<AppDbContext>(op =>
                 {

@@ -1,4 +1,6 @@
+using Ecom.Api.Mapping;
 using Ecom.Infrastructure;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,9 +11,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.InfrastructureConfiguration(builder.Configuration);
-var app = builder.Build();
+builder.Services.AddAutoMapper(_ => { }, AppDomain.CurrentDomain.GetAssemblies());
 
-// Configure the HTTP request pipeline.
+var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
