@@ -11,5 +11,6 @@ namespace Ecom.Core.Interfaces
         // You can add any additional methods specific to Product repository here
         Task <bool> AddProductAsync(AddProductDto productDto);
         Task <bool> UpdateProductAsync(UpdateProductDto updateProductDto);
+        Task DeleteProductAsync(Product product);
     }
 }

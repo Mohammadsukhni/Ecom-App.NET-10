@@ -1,8 +1,10 @@
 using Ecom.Api.Mapping;
+using Ecom.Api.Middleware;
 using Ecom.Infrastructure;
 using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddMemoryCache();
 
 // Add services to the container.
 
@@ -19,6 +21,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseMiddleware<ExceptionMiddleware>();
+app.UseStatusCodePagesWithRedirects("/errors/{0}");
 
 app.UseHttpsRedirection();
 
