@@ -8,7 +8,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CORSPolicy", builder =>
     {
-        builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials().WithOrigins("https://localhost:4200");
+        builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials().WithOrigins("http://localhost:4200");
     });
 });
 builder.Services.AddMemoryCache();
