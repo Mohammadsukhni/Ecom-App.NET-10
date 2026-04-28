@@ -3,6 +3,7 @@ using Ecom.Core.Dtos;
 using Ecom.Core.Entities.Product;
 using Ecom.Core.Interfaces;
 using Ecom.Core.Services;
+using Ecom.Core.Sharing;
 using Ecom.Infrastructure.Data;
 using Ecom.Infrastructure.Repositries.service;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,39 @@ namespace Ecom.Infrastructure.Repositries
             this.dbContext = dbContext;
             _mapper = mapper;
             _manageService = manageService;
+        }
+        public async Task<IEnumerable<ProductDto>> GetAllAsync(ProductParam productParam)
+        {
+            var query = dbContext.Products
+                .Include(p => p.Category)
+                .Include(p => p.Photos)
+                .AsNoTracking();
+            // Filter by search term if provided
+            if (!string.IsNullOrEmpty(productParam.Search))
+            {
+                var searchTerm = productParam.Search.Split(' ');
+                query = query.Where(p => searchTerm.All(searchTerm =>
+                p.Name.ToLower().Contains(searchTerm.ToLower()) || p.Description.ToLower().Contains(searchTerm.ToLower())));
+
+            }
+            // Filter by category if categoryId is provided
+            if (productParam.CategoryId.HasValue)
+            {
+                query = query.Where(p => p.CategoryId == productParam.CategoryId);
+            }
+            if (!string.IsNullOrEmpty(productParam.Sort))
+            {
+                query = productParam.Sort switch
+                {
+                    "PriceAsc" => query.OrderBy(p => p.NewPrice),
+                    "PriceDesc" => query.OrderByDescending(p => p.NewPrice),
+                    _ => query.OrderBy(p => p.Name),
+                };
+            }
+            
+            query =query.Skip((productParam.PageNumber - 1) * productParam.PageSize).Take(productParam.PageSize);
+            var result = _mapper.Map<List<ProductDto>>(query);
+            return result;
         }
         public async Task<bool> AddProductAsync(AddProductDto productDto)
         {
